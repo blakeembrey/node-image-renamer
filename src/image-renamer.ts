@@ -13,7 +13,7 @@ const persistent = !!argv['no-watch']
  * Check if the file name is a compatible image.
  */
 function isImage (filename: string) {
-  return /\.(?:jpe?g|png)$/.test(filename)
+  return /\.(?:jpe?g|png)$/i.test(filename)
 }
 
 /**
