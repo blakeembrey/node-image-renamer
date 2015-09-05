@@ -5,6 +5,8 @@ import { join, dirname, extname, basename } from 'path'
 import minimist = require('minimist')
 import moment = require('moment')
 
+require('es6-promise').polyfill()
+
 const argv = minimist(process.argv.slice(2))
 const dirs = argv._
 const persistent = !!argv['no-watch']
