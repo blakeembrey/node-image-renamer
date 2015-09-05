@@ -1,0 +1,45 @@
+{
+  "name": "node-image-renamer",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Simple node script for watching and renaming my images according to creation time",
+  "main": "lib/image-renamer.js",
+  "bin": {
+    "image-renamer": "lib/image-renamer.js"
+  },
+  "files": [
+    "lib/",
+    "LICENSE"
+  ],
+  "scripts": {
+    "lint": "# TODO",
+    "build": "rm -rf lib/ && tsc",
+    "test-script": "cp -rp test/fixtures test/_fixtures && node lib/image-renamer.js --no-watch test/_fixtures && [ -f test/_fixtures/2015-09-05--16-25-28.jpg ] && rm -rf test/_fixtures",
+    "test": "npm run build && npm run test-script"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blakeembrey/node-image-renamer.git"
+  },
+  "keywords": [],
+  "author": "Blake Embrey <hello@blakeembrey.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blakeembrey/node-image-renamer/issues"
+  },
+  "homepage": "https://github.com/blakeembrey/node-image-renamer",
+  "devDependencies": {
+    "blue-tape": "^0.1.10",
+    "istanbul": "^0.3.5",
+    "ncp": "^2.0.0",
+    "pre-commit": "^1.1.1",
+    "rimraf": "^2.4.3",
+    "typescript": "^1.5.3"
+  },
+  "dependencies": {
+    "chokidar": "^1.0.5",
+    "exif-parser": "^0.1.9",
+    "minimist": "^1.2.0",
+    "moment": "^2.10.6"
+  }
+}

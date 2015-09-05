@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "outDir": "lib",
+    "module": "commonjs",
+    "declaration": true,
+    "noImplicitAny": true,
+    "removeComments": false,
+    "sourceMap": true
+  },
+  "files": [
+    "src/image-renamer.ts",
+    "typings/tsd.d.ts",
+    "src/typings/exif-parser.d.ts"
+  ]
+}
