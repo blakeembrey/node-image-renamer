@@ -35,7 +35,7 @@ function handleFile (filename: string, stats: Stats) {
 
     // Rename the file by date.
     function renameByDate (date: Date | number) {
-      const dateName = moment(date).utc().format('YYYY-MM-DD--H-mm-ss') + ext
+      const dateName = moment(date).utc().format('YYYY-MM-DD--HH-mm-ss') + ext
       const newName = join(dirname(filename), dateName)
 
       rename(filename, newName, (err) => err ? resolve() : reject(err))
