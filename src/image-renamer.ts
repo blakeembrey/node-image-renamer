@@ -53,7 +53,7 @@ function handleFile (filename: string, stats: Stats) {
         return renameByDate(stats.mtime)
       }
 
-      return renameByDate(exif.tags.DateTimeOriginal)
+      return renameByDate(exif.tags.DateTimeOriginal * 1000)
     })
   })
 }
