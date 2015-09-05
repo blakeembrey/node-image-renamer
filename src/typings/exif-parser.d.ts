@@ -3,11 +3,6 @@ declare module 'exif-parser' {
     tags: {
       DateTimeOriginal?: number
     }
-    imageSize: {
-      width: number
-      height: number
-    }
-    [key: string]: any
   }
 
   export interface IParser {

@@ -40,7 +40,7 @@ function handleFile (filename: string, stats: Stats) {
       const dateName = moment(date).utc().format('YYYY-MM-DD--HH-mm-ss') + ext
       const newName = join(dirname(filename), dateName)
 
-      rename(filename, newName, (err) => err ? resolve() : reject(err))
+      rename(filename, newName, (err) => err ? reject(err) : resolve())
     }
 
     return readFile(filename, (err: Error, contents: Buffer) => {
@@ -49,13 +49,18 @@ function handleFile (filename: string, stats: Stats) {
       }
 
       const parser = create(contents)
-      const exif = parser.parse()
 
-      if (exif.tags.DateTimeOriginal == null) {
-        return renameByDate(stats.mtime)
+      try {
+        const exif = parser.parse()
+
+        if (exif.tags.DateTimeOriginal != null) {
+          return renameByDate(exif.tags.DateTimeOriginal * 1000)
+        }
+      } catch (err) {
+        // Can not parse exif data from PNG.
       }
 
-      return renameByDate(exif.tags.DateTimeOriginal * 1000)
+      return renameByDate(stats.mtime)
     })
   })
 }
