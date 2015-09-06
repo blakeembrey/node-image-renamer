@@ -10,6 +10,7 @@
   },
   "files": [
     "src/image-renamer.ts",
+    "src/image-renamer.spec.ts",
     "typings/tsd.d.ts",
     "src/typings/exif-parser.d.ts"
   ]

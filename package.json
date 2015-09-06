@@ -14,8 +14,8 @@
   "scripts": {
     "lint": "# TODO",
     "build": "rm -rf lib/ && tsc",
-    "test-script": "cp -rp test/fixtures test/_fixtures && istanbul cover lib/image-renamer.js --no-watch test/_fixtures && if [ ! -f test/_fixtures/2015-02-08--22-05-28.jpg ] || [ ! -f test/_fixtures/2015-03-23--15-28-32.jpg ] || [ ! -f test/_fixtures/2015-09-05--20-07-53.png ]; then ls test/_fixtures && exit 1; fi && rm -rf test/_fixtures",
-    "test": "npm run build && npm run test-script"
+    "test-spec": "tape lib/**/*.spec.js | faucet",
+    "test": "npm run build && npm run test-spec"
   },
   "repository": {
     "type": "git",
@@ -29,11 +29,9 @@
   },
   "homepage": "https://github.com/blakeembrey/node-image-renamer",
   "devDependencies": {
-    "blue-tape": "^0.1.10",
-    "istanbul": "^0.3.5",
-    "ncp": "^2.0.0",
+    "faucet": "0.0.1",
     "pre-commit": "^1.1.1",
-    "rimraf": "^2.4.3",
+    "tape": "^4.2.0",
     "typescript": "^1.5.3"
   },
   "dependencies": {
