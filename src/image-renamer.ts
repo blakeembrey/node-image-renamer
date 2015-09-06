@@ -10,6 +10,7 @@ require('es6-promise').polyfill()
 const argv = minimist(process.argv.slice(2))
 const dirs = argv._
 const persistent = !!argv['no-watch']
+const force = !!argv['force']
 
 /**
  * Check if the file name is a compatible image.
@@ -31,7 +32,7 @@ function handleFile (filename: string, stats: Stats) {
     const ext = extname(filename)
 
     // Skip formatting already renamed files.
-    if (/^\d{4}\-\d{2}\-\d{2}--\d{2}-\d{2}-\d{2}/.test(basename(filename, ext))) {
+    if (!force && /^\d{4}\-\d{2}\-\d{2}--\d{2}-\d{2}-\d{2}/.test(basename(filename, ext))) {
       return
     }
 
