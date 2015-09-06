@@ -7,8 +7,13 @@
 ## Usage
 
 ```sh
-node lib/image-renamer.js lib/
+node lib/image-renamer.js pictures/
 ```
+
+**Options**
+
+* `--no-watch` Disable persistence of the file watcher
+* `--force` Rename all images, regardless if it looks like it already got renamed
 
 ## License
 
