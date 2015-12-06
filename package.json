@@ -14,8 +14,9 @@
   "scripts": {
     "lint": "# TODO",
     "build": "rm -rf lib/ && tsc",
-    "test-spec": "tape lib/**/*.spec.js | faucet",
-    "test": "npm run build && npm run test-spec"
+    "test-spec": "tape lib/**/*.spec.js | tap-spec",
+    "test": "npm run build && npm run test-spec",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -29,10 +30,10 @@
   },
   "homepage": "https://github.com/blakeembrey/node-image-renamer",
   "devDependencies": {
-    "faucet": "0.0.1",
     "pre-commit": "^1.1.1",
+    "tap-spec": "^4.1.1",
     "tape": "^4.2.0",
-    "typescript": "^1.5.3"
+    "typescript": "^1.7.3"
   },
   "dependencies": {
     "chokidar": "^1.0.5",

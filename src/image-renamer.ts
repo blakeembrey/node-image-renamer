@@ -1,7 +1,9 @@
+#!/usr/bin/env node
+
 import { watch } from 'chokidar'
 import { create } from 'exif-parser'
-import { stat, readFile, readdirSync, statSync, Stats, rename } from 'fs'
-import { join, dirname, extname, basename } from 'path'
+import { stat, readFile, readdirSync, Stats, rename } from 'fs'
+import { join, resolve, dirname, extname, basename } from 'path'
 import minimist = require('minimist')
 import moment = require('moment')
 
@@ -10,6 +12,7 @@ require('es6-promise').polyfill()
 const argv = minimist(process.argv.slice(2))
 const dirs = argv._
 const persistent = !!argv['no-watch']
+const skipRename = !!argv['dry-run']
 const force = !!argv['force']
 
 /**
@@ -22,31 +25,58 @@ function isImage (filename: string) {
 /**
  * Handle image renaming.
  */
-function handleFile (filename: string, stats: Stats) {
+function handleFile (path: string, stats: Stats) {
   return new Promise((resolve, reject) => {
     // Skip formatting non-images.
-    if (!isImage(filename)) {
-      return
+    if (!isImage(path)) {
+      return resolve()
     }
 
-    const ext = extname(filename)
+    console.log('Image Path: %s', path)
+
+    const ext = extname(path)
+    const done = (err: Error) => err ? reject(err) : resolve()
 
     // Skip formatting already renamed files.
-    if (!force && /^\d{4}\-\d{2}\-\d{2}--\d{2}-\d{2}-\d{2}/.test(basename(filename, ext))) {
-      return
+    if (!force && /^\d{4}\-\d{2}\-\d{2}--\d{2}-\d{2}-\d{2}(?:-\d)?/.test(basename(path, ext))) {
+      return resolve()
+    }
+
+    function renameWithCheck (name: string, offset: number, cb: (err: Error) => any) {
+      const newFilename = offset === 0 ? `${name}${ext}` : `${name}-${offset}${ext}`
+      const newPath = join(dirname(path), newFilename)
+
+      if (path === newPath) {
+        console.log('Path match: "%s"', path)
+
+        return cb(null)
+      }
+
+      stat(newPath, function (err) {
+        if (err && err.code === 'ENOENT') {
+          console.log('Rename: "%s" -> "%s"', path, newPath)
+
+          if (skipRename) {
+            return cb(null)
+          }
+
+          return rename(path, newPath, cb)
+        }
+
+        renameWithCheck(name, offset + 1, cb)
+      })
     }
 
     // Rename the file by date.
-    function renameByDate (date: Date | number) {
-      const dateName = moment(date).utc().format('YYYY-MM-DD--HH-mm-ss') + ext
-      const newName = join(dirname(filename), dateName)
+    function renameByDate (date: Date | number, cb: (err: Error) => any) {
+      const dateFilename = moment(date).utc().format('YYYY-MM-DD--HH-mm-ss')
 
-      rename(filename, newName, (err) => err ? reject(err) : resolve())
+      renameWithCheck(dateFilename, 0, cb)
     }
 
-    return readFile(filename, (err: Error, contents: Buffer) => {
+    return readFile(path, (err: Error, contents: Buffer) => {
       if (err) {
-        return renameByDate(stats.mtime)
+        return renameByDate(stats.mtime, done)
       }
 
       const parser = create(contents)
@@ -55,20 +85,20 @@ function handleFile (filename: string, stats: Stats) {
         const exif = parser.parse()
 
         if (exif.tags.DateTimeOriginal != null) {
-          return renameByDate(exif.tags.DateTimeOriginal * 1000)
+          return renameByDate(exif.tags.DateTimeOriginal * 1000, done)
         }
       } catch (err) {
         // Can not parse exif data from PNG.
       }
 
-      return renameByDate(stats.mtime)
+      return renameByDate(stats.mtime, done)
     })
   })
 }
 
 // Set up all listeners and initial rename script.
 dirs.forEach((dir) => {
-  watch(dir, { persistent, followSymlinks: false })
+  watch(resolve(dir), { persistent, followSymlinks: false })
     .on('add', handleFile)
     .on('change', handleFile)
 })
