@@ -38,7 +38,6 @@
   "dependencies": {
     "chokidar": "^1.0.5",
     "es6-promise": "^3.0.2",
-    "exif-parser": "^0.1.9",
     "minimist": "^1.2.0",
     "moment": "^2.10.6"
   }
