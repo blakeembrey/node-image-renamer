@@ -33,8 +33,6 @@ function handleFile (path: string, stats: Stats) {
       return resolve()
     }
 
-    console.log('Image Path: %s', path)
-
     const ext = extname(path)
     const done = (err: Error) => err ? reject(err) : resolve()
 
@@ -43,12 +41,14 @@ function handleFile (path: string, stats: Stats) {
       return resolve()
     }
 
+    console.log('Image Path: %s', path)
+
     function renameWithCheck (name: string, offset: number, cb: (err: Error) => any) {
       const newFilename = offset === 0 ? `${name}${ext}` : `${name}-${offset}${ext}`
       const newPath = join(dirname(path), newFilename)
 
       if (path === newPath) {
-        console.log('Path match: "%s"', path)
+        console.log('Path already equal: "%s"', path)
 
         return cb(null)
       }
@@ -75,7 +75,7 @@ function handleFile (path: string, stats: Stats) {
       renameWithCheck(dateFilename, 0, cb)
     }
 
-    return renameByDate(stats.mtime, done)
+    return renameByDate(stats.birthtime || stats.mtime, done)
   })
 }
 
