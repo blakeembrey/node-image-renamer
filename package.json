@@ -33,11 +33,11 @@
     "pre-commit": "^1.1.1",
     "tap-spec": "^4.1.1",
     "tape": "^4.2.0",
-    "typescript": "^1.7.3"
+    "typescript": "^2.3.2"
   },
   "dependencies": {
     "chokidar": "^1.0.5",
-    "es6-promise": "^3.0.2",
+    "es6-promise": "^4.1.0",
     "minimist": "^1.2.0",
     "moment": "^2.10.6"
   }
