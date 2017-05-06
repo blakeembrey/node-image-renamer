@@ -1,5 +1,7 @@
 # Node Image Renamer
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/blakeembrey/node-image-renamer.svg)](https://greenkeeper.io/)
+
 [![Build status][travis-image]][travis-url]
 
 > Simple node script for watching and renaming my images according to creation time.
